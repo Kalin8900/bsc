@@ -1,0 +1,60 @@
+version: '3'
+
+services:
+  app:
+    container_name: app
+    build: .
+    ports:
+      - '8000:8080'
+  redis:
+    container_name: redis
+    # restart: always
+    hostname: redis
+    image: redislabs/redisearch:latest
+    ports:
+      - 6379:6379
+    volumes:
+      - ./redis.conf:/usr/local/etc/redis        
+  postgis:
+    container_name: postgis
+    # restart: always
+    hostname: db
+    image: postgis/postgis:latest
+    environment:
+      - POSTGRES_USER=${POSTGIS_USER}
+      - POSTGRES_PASSWORD=${POSTGIS_PASSWORD}
+      - POSTGRES_DB=${POSTGIS_DB}
+    ports:
+      - 5432:5432
+    volumes:
+      - ./seed-db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 25
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    # restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@asdf.com
+      - PGADMIN_DEFAULT_PASSWORD=pgadmin
+    ports:
+      - 3000:80
+  neo4j:
+    container_name: neo4j
+    # restart: always
+    hostname: neo4j
+    image: neo4j:latest
+    ports:
+      - 7474:7474
+      - 7687:7687
+    environment:
+      - NEO4JLABS_PLUGINS=["graph-data-science"]
+      - NEO4J_ACCEPT_LICENSE_AGREEMENT=yes
+      - NEO4J_AUTH=${NEO4J_USERNAME}/${NEO4J_PASSWORD}
+networks:
+  default:
+    external:
+      name: joinus

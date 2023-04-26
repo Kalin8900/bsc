@@ -1,0 +1,20 @@
+{
+  "extends": ["../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "parserOptions": {
+    "tsconfigRootDir": "./apps/server",
+    "project": ["./tsconfig.json"]
+  },
+  "overrides": [
+    {
+      "files": ["./tests/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off"
+      }
+    },
+    {
+      "files": ["*.spec.ts"],
+      "rules": {}
+    }
+  ]
+}

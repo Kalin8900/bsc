@@ -1,0 +1,24 @@
+{
+  "name": "server-base",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/server/base/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/server/base/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/server/base"],
+      "options": {
+        "jestConfig": "libs/server/base/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": ["server"]
+}
